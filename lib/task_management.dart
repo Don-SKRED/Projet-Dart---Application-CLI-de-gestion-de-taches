@@ -134,23 +134,6 @@ Future<void> showListTask() async {
 
 Future<void> deleteTask() async {
   String? taskTitle;
-  // int? index;
-  // listTask = await readData();
-  // if (listTask.isEmpty) {
-  //   throw ListException(listTask.length);
-  // } else {
-  //   stdout.write("quel tâche voulez-vous supprimer? (numéro de la tâche): ");
-  //   do {
-  //     inputTaskToDelete = stdin.readLineSync();
-  //     index = int.tryParse(inputTaskToDelete!);
-  //     if (index == null || index <= 0 || index > listTask.length) {
-  //       throw ListException(listTask.length);
-  //     }
-  //   } while (index <= 0);
-
-  //   listTask.removeAt(index - 1);
-  //   stdout.writeln("cette tâche a été supprimé :(");
-  // }
 
   if (await file.exists()) {
     listTask = await repository.readData();
@@ -172,16 +155,6 @@ Future<void> deleteTask() async {
     throw ListException(listTask.length);
   }
 }
-
-// List<Task> sortByDate(List<Task> list) {
-//   list.sort((a, b) => a.deadline!.compareTo(b.deadline!));
-//   return list;
-// }
-
-// List<Task> sortByPriority(List<Task> list) {
-//   list.sort((a, b) => a.priority.value.compareTo(b.priority.value));
-//   return list;
-// }
 
 Future<void> changeStatus() async {
   String? inputTaskToChangeStatus;
@@ -220,7 +193,6 @@ DateTime dateManagement(String inputDate) {
   final month = inputDate.substring(3, 5);
   final year = inputDate.substring(6);
 
-  // if (date != null && date.isNotEmpty) {S
   for (int i = date.length - 1; i >= 0; i--) {
     dateToDisplay = "$dateToDisplay${date[i]}";
     if (i != 0) dateToDisplay = "$dateToDisplay-";
@@ -247,36 +219,6 @@ DateTime dateManagement(String inputDate) {
     return dateTime;
   }
 }
-
-// Future<void> saveData(Map<String, dynamic> data) async {
-//   String jsonContent;
-//   if (await file.exists()) {
-//     jsonContent = await file.readAsString();
-//     List content = jsonDecode(jsonContent);
-//     print(content.runtimeType);
-//     content.add(data);
-// //     final jsonList = encoder.convert(content);
-//     await file.writeAsString(jsonList);
-//   } else {
-// //     final jsonText = encoder.convert([data]);
-//     await file.writeAsString(jsonText);
-//   }
-// }
-
-// Future<List> readData() async {
-//   final file = File(filePath);
-//   if (!await file.exists()) {
-//     print("Aucune tâche n'a encore été créer");
-//   }
-//   try {
-//     String jsonText = await file.readAsString();
-//     List data = jsonDecode(jsonText);
-//     return data;
-//   } catch (e) {
-//     print(e);
-//     return [];
-//   }
-// }
 
 void displayList() {
   for (int i = 0; i < listTask.length; i++) {

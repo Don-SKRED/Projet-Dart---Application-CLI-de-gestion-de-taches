@@ -31,11 +31,6 @@ class Task extends Work implements Check {
     status = value;
   }
 
-  // set status(bool status) {
-  //   _status = status;
-  // }
-
-  // bool get status => _status;
   Map<String, dynamic> toJson() => {
     'title': title,
     'priority': priority.name,
