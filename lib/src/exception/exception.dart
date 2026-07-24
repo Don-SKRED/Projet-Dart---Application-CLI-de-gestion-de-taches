@@ -16,7 +16,7 @@ class DateException implements Exception {
   DateException(this.dateSource);
   @override
   String toString() {
-    return "$dateSource est un format de  date est invalide";
+    return "'$dateSource' est un format de date invalide. Utilisez le format: jj-mm-aaaa";
   }
 }
 
@@ -26,6 +26,6 @@ class PriorityException implements Exception {
 
   @override
   String toString() {
-    return "veuillez choisier parmis les trois priorité disponible";
+    return "Priorité invalide: '$value'. Veuillez choisir parmi: low, medium, high";
   }
 }

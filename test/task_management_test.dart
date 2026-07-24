@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:task_management/src/exception/exception.dart';
 import 'package:task_management/src/models/task.dart';
 import 'package:task_management/src/repositories/repository.dart';
 import 'package:task_management/task_management.dart';
@@ -11,6 +12,10 @@ void main() {
     test("test sur la conversion en date", () {
       String dateTest = "22-07-2026";
       expect(dateManagement(dateTest), equals(DateTime.parse("2026-07-22")));
+    });
+
+    test("Rejet d'une date trop courte", () {
+      expect(() => dateManagement("22-07-26"), throwsA(isA<DateException>()));
     });
   });
 

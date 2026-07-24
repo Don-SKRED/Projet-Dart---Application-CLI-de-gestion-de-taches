@@ -5,10 +5,8 @@ import 'package:task_management/src/exception/exception.dart';
 import 'package:task_management/src/models/task.dart';
 import 'package:task_management/src/repositories/repository.dart';
 
-
 List<Task> listTask = [];
-const filePath =
-    r"save.json";
+const filePath = r"save.json";
 final file = File(filePath);
 final encoder = const JsonEncoder.withIndent('');
 
@@ -37,7 +35,7 @@ Future<void> addTask() async {
   Task newTask;
   DateTime? date;
   stdout.writeln("Donner le nom du travail (optionnel)");
-  String? inputNameWork = stdin.readLineSync();
+  String? inputWorkName = stdin.readLineSync();
 
   String? inputTitle;
   stdout.writeln("Donner une priorité ( low, medium, high ), par défaut [low]");
@@ -52,8 +50,8 @@ Future<void> addTask() async {
     date = dateManagement(inputdeadline);
   }
 
-   stdout.writeln("Donner un titre:");
- 
+  stdout.writeln("Donner un titre:");
+
   do {
     inputTitle = stdin.readLineSync();
     if (inputTitle!.isEmpty || inputTitle == "") {
@@ -62,13 +60,13 @@ Future<void> addTask() async {
   } while (inputTitle.isEmpty || inputTitle == "");
   if (inputdeadline != null && inputdeadline != "" && date != null) {
     newTask = Task(
-      name: inputNameWork,
+      name: inputWorkName,
       title: inputTitle,
       deadline: date,
       priority: priority,
     );
   } else {
-    newTask = Task(name: inputNameWork, title: inputTitle, priority: priority);
+    newTask = Task(name: inputWorkName, title: inputTitle, priority: priority);
   }
   await repository.saveData(newTask);
   print("Nouvelle tâche ajouté :)");
@@ -100,35 +98,33 @@ Future<void> showListTask() async {
       switch (choixUtilisateur) {
         case '1':
           listTask.sort((a, b) => a.priority.value.compareTo(b.priority.value));
-
-          for (int i = 0; i < listTask.length; i++) {
-            stdout.writeln(
-              "[${i + 1}] TITRE: ${listTask[i].title} - PRIORITE: ${listTask[i].priority.name} ${listTask[i].deadline == null ? "" : "- DATE LIMITE: ${listTask[i].deadline!.day}-${listTask[i].deadline!.month}-${listTask[i].deadline!.year}"} - STATUS: ${listTask[i].status ? "Terminé" : "En cours"}  ",
-            );
-          }
+          displayList();
 
         case '2':
-          listTask.sort((a, b) => a.deadline!.compareTo(b.deadline!));
-          for (int i = 0; i < listTask.length; i++) {
-            stdout.writeln(
-              "[${i + 1}] TITRE: ${listTask[i].title} - PRIORITE: ${listTask[i].priority.name} ${listTask[i].deadline == null ? "" : "- DATE LIMITE: ${listTask[i].deadline!.day}-${listTask[i].deadline!.month}-${listTask[i].deadline!.year}"} - STATUS: ${listTask[i].status ? "Terminé" : "En cours"}  ",
-            );
-          }
+          var tasksWithDeadline = listTask
+              .where((t) => t.deadline != null)
+              .toList();
+
+          tasksWithDeadline.sort((a, b) => a.deadline!.compareTo(b.deadline!));
+          listTask = [
+            ...tasksWithDeadline,
+            ...listTask.where((t) => t.deadline == null),
+          ];
+          displayList();
         case '3':
           listTask.sort((a, b) => b.priority.value.compareTo(a.priority.value));
-          for (int i = 0; i < listTask.length; i++) {
-            stdout.writeln(
-              "[${i + 1}] TITRE: ${listTask[i].title} - PRIORITE: ${listTask[i].priority.name} ${listTask[i].deadline == null ? "" : "- DATE LIMITE: ${listTask[i].deadline!.day}-${listTask[i].deadline!.month}-${listTask[i].deadline!.year}"} - STATUS: ${listTask[i].status ? "Terminé" : "En cours"}  ",
-            );
-          }
+          displayList();
 
         case '4':
-          listTask.sort((a, b) => b.deadline!.compareTo(a.deadline!));
-          for (int i = 0; i < listTask.length; i++) {
-            stdout.writeln(
-              "[${i + 1}] TITRE: ${listTask[i].title} - PRIORITE: ${listTask[i].priority.name} ${listTask[i].deadline == null ? "" : "- DATE LIMITE: ${listTask[i].deadline!.day}-${listTask[i].deadline!.month}-${listTask[i].deadline!.year}"} - STATUS: ${listTask[i].status ? "Terminé" : "En cours"}  ",
-            );
-          }
+          var tasksWithDeadline = listTask
+              .where((t) => t.deadline != null)
+              .toList();
+          tasksWithDeadline.sort((a, b) => b.deadline!.compareTo(a.deadline!));
+          listTask = [
+            ...tasksWithDeadline,
+            ...listTask.where((t) => t.deadline == null).toList(),
+          ];
+          displayList();
       }
     } while (choixUtilisateur != '0');
   } else {
@@ -163,9 +159,8 @@ Future<void> deleteTask() async {
     }
     stdout.write("quel tâche voulez-vous supprimer? (nom de la tâche): ");
     taskTitle = stdin.readLineSync();
-    var listTest = listTask.map((task) => task.title == taskTitle);
-
-    if (listTest.contains(true)) {
+    if (listTask.any((task) => task.title == taskTitle)) {
+      // ✅ any() s'arrête au premier match
       listTask.removeWhere((task) => task.title == taskTitle);
       stdout.writeln("cette tâche a été supprimé :(");
       final newList = encoder.convert(listTask);
@@ -221,6 +216,9 @@ DateTime dateManagement(String inputDate) {
   DateTime? dateTime;
   String dateToDisplay = "";
   List<String>? date = inputDate.split("-");
+  final day = inputDate.substring(0, 2);
+  final month = inputDate.substring(3, 5);
+  final year = inputDate.substring(6);
 
   // if (date != null && date.isNotEmpty) {S
   for (int i = date.length - 1; i >= 0; i--) {
@@ -230,17 +228,21 @@ DateTime dateManagement(String inputDate) {
   if (inputDate.length != 10) {
     throw DateException(inputDate);
   } else {
-    if (inputDate[2] != '-' && inputDate[5] != '-') {
+    if (inputDate[2] != '-' || inputDate[5] != '-') {
       throw DateException(inputDate);
     } else {
-      if (inputDate.substring(0, 2).length != 2 &&
-          inputDate.substring(3, 5).length != 2 &&
-          inputDate.substring(6).length != 4) {
+      if (day.length != 2 && month.length != 2 && year.length != 4) {
         throw DateException(inputDate);
       } else {
-        if (int.parse(inputDate.substring(0, 2)).runtimeType != int &&
-            int.parse(inputDate.substring(3, 5)).runtimeType != int &&
-            int.parse(inputDate.substring(6)).runtimeType != int) {
+        if (int.parse(day).runtimeType != int &&
+            int.parse(month).runtimeType != int &&
+            int.parse(year).runtimeType != int) {
+          throw DateException(inputDate);
+        }
+        if (int.parse(day) < 1 ||
+            int.parse(day) > 31 ||
+            int.parse(month) < 1 ||
+            int.parse(year) > 12) {
           throw DateException(inputDate);
         }
       }
@@ -280,3 +282,11 @@ DateTime dateManagement(String inputDate) {
 //     return [];
 //   }
 // }
+
+void displayList() {
+  for (int i = 0; i < listTask.length; i++) {
+    stdout.writeln(
+      "[${i + 1}] TITRE: ${listTask[i].title} - PRIORITE: ${listTask[i].priority.name} ${listTask[i].deadline == null ? "" : "- DATE LIMITE: ${listTask[i].deadline!.day}-${listTask[i].deadline!.month}-${listTask[i].deadline!.year}"} - STATUS: ${listTask[i].status ? "Terminé" : "En cours"}  ",
+    );
+  }
+}

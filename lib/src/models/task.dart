@@ -1,4 +1,3 @@
-
 import 'package:task_management/src/models/check.dart';
 import 'package:task_management/src/models/work.dart';
 import 'package:task_management/task_management.dart';
@@ -40,7 +39,7 @@ class Task extends Work implements Check {
   Map<String, dynamic> toJson() => {
     'title': title,
     'priority': priority.name,
-    'deadline': deadline.toString(),
+    'deadline': deadline?.toString(),
     'status': status,
   };
 
@@ -49,7 +48,9 @@ class Task extends Work implements Check {
       name: json["name"],
       title: json['title'],
       priority: priorityChoice(json['priority']),
-      deadline: DateTime.parse(json['deadline']),
+      deadline: json['deadline'] != null && json['deadline'] != 'null'
+          ? DateTime.parse(json['deadline'] as String)
+          : null,
       status: json['status'],
     );
   }

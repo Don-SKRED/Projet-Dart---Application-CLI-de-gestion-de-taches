@@ -5,6 +5,8 @@ class Repository<T> {
   final String filePath;
   final T Function(Map<String, dynamic>) fromJson;
   final Map<String, dynamic> Function(T) toJson;
+  final JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+
   Repository({
     required this.filePath,
     required this.fromJson,
@@ -24,7 +26,7 @@ class Repository<T> {
           .map((item) => fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print(e);
+      print("Erreur lors de la lecture: $e");
       return [];
     }
   }
@@ -36,11 +38,11 @@ class Repository<T> {
       final jsonContent = await file.readAsString();
       List content = jsonDecode(jsonContent);
       content.add(dataMap);
-      final encoder = const JsonEncoder.withIndent('');
+      ;
       final jsonList = encoder.convert(content);
       await file.writeAsString(jsonList);
     } else {
-      final encoder = const JsonEncoder.withIndent('');
+      ;
       final jsonText = encoder.convert([dataMap]);
       await file.writeAsString(jsonText);
     }
