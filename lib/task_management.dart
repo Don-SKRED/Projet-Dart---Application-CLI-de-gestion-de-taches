@@ -231,14 +231,9 @@ DateTime dateManagement(String inputDate) {
     if (inputDate[2] != '-' || inputDate[5] != '-') {
       throw DateException(inputDate);
     } else {
-      if (day.length != 2 && month.length != 2 && year.length != 4) {
+      if (day.length != 2 || month.length != 2 || year.length != 4) {
         throw DateException(inputDate);
       } else {
-        if (int.parse(day).runtimeType != int &&
-            int.parse(month).runtimeType != int &&
-            int.parse(year).runtimeType != int) {
-          throw DateException(inputDate);
-        }
         if (int.parse(day) < 1 ||
             int.parse(day) > 31 ||
             int.parse(month) < 1 ||
