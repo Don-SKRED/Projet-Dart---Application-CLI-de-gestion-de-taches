@@ -8,6 +8,7 @@ import 'package:task_management/task_management.dart';
 import 'package:test/test.dart';
 
 void main() {
+  // test sur les dates
   group('Tout les tests sur les dates', () {
     test("test sur la conversion en date", () {
       String dateTest = "22-07-2026";
@@ -19,11 +20,13 @@ void main() {
     });
   });
 
+  // test pour la priorité
   test("test pour la Priorité", () {
     String priorityTest = "low";
     expect(priorityChoice(priorityTest), equals(Priority.low));
   });
 
+  // test pour la méthode fromJson de Task
   test("test de la méthode fromJson de Task", () {
     Map<String, dynamic> json = {
       "name": "work test",
@@ -40,6 +43,8 @@ void main() {
     expect(taskTest.priority, equals(Priority.low));
     expect(taskTest.status, equals(false));
   });
+
+  // test du repository
   group('Tests du Repository', () {
     final fileTemp = File('fileTemp.json');
 
@@ -55,6 +60,7 @@ void main() {
       }
     });
 
+    // test de la méthode saveData
     test('test de saveData() ', () async {
       final repository = Repository<Task>(
         filePath: 'fileTemp.json',
@@ -69,6 +75,8 @@ void main() {
       final List listContent = jsonDecode(content);
       expect(listContent[0]['title'], equals('titre'));
     });
+
+    // test de la méthode readData
     test('test de readData() ', () async {
       final repository = Repository<Task>(
         filePath: 'fileTemp.json',

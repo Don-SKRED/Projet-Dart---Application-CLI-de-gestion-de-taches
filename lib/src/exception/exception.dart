@@ -1,3 +1,5 @@
+// exception personnalisée pour les listes
+
 class ListException implements Exception {
   final int listLength;
   ListException(this.listLength);
@@ -11,6 +13,7 @@ class ListException implements Exception {
   }
 }
 
+// l'exception pour les dates
 class DateException implements Exception {
   final String dateSource;
   DateException(this.dateSource);
@@ -20,6 +23,7 @@ class DateException implements Exception {
   }
 }
 
+//exception personnalisé pour les priorités des tâches(Task-priority)
 class PriorityException implements Exception {
   final String? value;
   PriorityException({this.value});

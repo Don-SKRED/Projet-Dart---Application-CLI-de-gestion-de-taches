@@ -2,6 +2,7 @@ import 'package:task_management/src/models/check.dart';
 import 'package:task_management/src/models/work.dart';
 import 'package:task_management/task_management.dart';
 
+//enumération pour les priorités des tâches
 enum Priority {
   low(value: 1),
   medium(value: 2),
@@ -31,6 +32,7 @@ class Task extends Work implements Check {
     status = value;
   }
 
+  // convertir la tâche en json pour l'enregistrer
   Map<String, dynamic> toJson() => {
     'title': title,
     'priority': priority.name,
@@ -38,6 +40,7 @@ class Task extends Work implements Check {
     'status': status,
   };
 
+  // convertir le json en tâche
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
       name: json["name"],

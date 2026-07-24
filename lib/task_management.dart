@@ -10,12 +10,14 @@ const filePath = r"save.json";
 final file = File(filePath);
 final encoder = const JsonEncoder.withIndent('');
 
+//une instance de repository
 final Repository<Task> repository = Repository(
   filePath: filePath,
   fromJson: Task.fromJson,
   toJson: (task) => task.toJson(),
 );
 
+//une fonction qui va permettre de choisir la priorité
 Priority priorityChoice(String? inputUser) {
   switch (inputUser) {
     case 'low':
@@ -31,6 +33,7 @@ Priority priorityChoice(String? inputUser) {
   }
 }
 
+//une fonction qui va permettre d'ajouter une tâche
 Future<void> addTask() async {
   Task newTask;
   DateTime? date;
@@ -72,6 +75,7 @@ Future<void> addTask() async {
   print("Nouvelle tâche ajouté :)");
 }
 
+//une fonction qui va permettre d'afficher la liste des tâches
 Future<void> showListTask() async {
   String? choixUtilisateur;
 
@@ -122,7 +126,7 @@ Future<void> showListTask() async {
           tasksWithDeadline.sort((a, b) => b.deadline!.compareTo(a.deadline!));
           listTask = [
             ...tasksWithDeadline,
-            ...listTask.where((t) => t.deadline == null).toList(),
+            ...listTask.where((t) => t.deadline == null),
           ];
           displayList();
       }
@@ -132,6 +136,7 @@ Future<void> showListTask() async {
   }
 }
 
+// une fonction qui va permettre de supprimer une tâche
 Future<void> deleteTask() async {
   String? taskTitle;
 
@@ -156,6 +161,7 @@ Future<void> deleteTask() async {
   }
 }
 
+// une fonction qui va permettre de changer le status d'une tâche
 Future<void> changeStatus() async {
   String? inputTaskToChangeStatus;
   int? index;
@@ -184,6 +190,8 @@ Future<void> changeStatus() async {
     throw ListException(listTask.length);
   }
 }
+
+// une fonction qui va permettre de gérer la date
 
 DateTime dateManagement(String inputDate) {
   DateTime? dateTime;
@@ -220,6 +228,7 @@ DateTime dateManagement(String inputDate) {
   }
 }
 
+// une fonction qui va permettre d'afficher la liste des tâches
 void displayList() {
   for (int i = 0; i < listTask.length; i++) {
     stdout.writeln(

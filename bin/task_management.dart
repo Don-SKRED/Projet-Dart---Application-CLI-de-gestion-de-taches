@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:task_management/src/exception/exception.dart';
@@ -7,12 +6,14 @@ import 'package:task_management/task_management.dart';
 void main(List<String> arguments) async {
   String? choixUtilisateur;
 
+  // Affichage du menu
   stdout.writeln("1- Pour ajouter une nouvelle tâche");
   stdout.writeln("2- Pour Lister toutes les tâches");
   stdout.writeln("3- Pour supprimer une tâche");
   stdout.writeln("4- Pour marquer une tâche comme terminé");
   stdout.writeln("0- Pour quitter");
 
+  // Boucle principale du programme
   do {
     stdout.write("Donnez votre choix (Menu):");
     choixUtilisateur = stdin.readLineSync();
