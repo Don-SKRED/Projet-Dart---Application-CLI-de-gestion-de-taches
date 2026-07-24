@@ -4,16 +4,11 @@ Une application Dart en ligne de commande pour gérer vos tâches quotidiennes.
 
 ## Fonctionnalités
 
-- ✅ Ajouter une nouvelle tâche
-- ✅ Lister toutes les tâches avec tri (par priorité, par date)
-- ✅ Marquer une tâche comme terminée
-- ✅ Supprimer une tâche
-- ✅ Persistence des données en JSON
-
-## Prérequis
-
-- Dart SDK 3.10.8 ou plus récent
-- Une ligne de commande (Terminal, PowerShell, etc.)
+- Ajouter une nouvelle tâche
+- Lister toutes les tâches avec tri (par priorité, par date)
+- Marquer une tâche comme terminée
+- Supprimer une tâche
+- Persistence des données en JSON
 
 ## Installation
 
